@@ -1,4 +1,4 @@
-public class MyWaitNotify{
+public class WaitNotify{
 
   MonitorObject myMonitorObject = new MonitorObject();
 

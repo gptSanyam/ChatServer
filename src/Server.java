@@ -6,8 +6,6 @@ import java.lang.*;
 public class Server {
 	
 	static Socket clientSocket;
-	static String msg="No message found!";
-	static boolean written= false;
 	
 	static Connection[] connArr = new Connection[5];
 	

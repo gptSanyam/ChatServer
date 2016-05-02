@@ -7,12 +7,12 @@ import java.util.Queue;
  *
  */
 public class Connection {
-	MyWaitNotify mwn;
+	WaitNotify mwn;
 	Queue<String> msgQ; //Modify to a concurrent Queue
 	boolean isOnline = false; // will be used later
 	
 	public Connection(){
-		mwn = new MyWaitNotify();
+		mwn = new WaitNotify();
 		msgQ = new LinkedList<String>();
 	}
 	
