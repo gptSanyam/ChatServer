@@ -6,7 +6,7 @@ public class SimpleClient {
         
         
         String hostName = "127.0.0.1";
-        int portNumber = Integer.parseInt("54321");
+        int portNumber = Integer.parseInt("5050");
 
         try (
             Socket echoSocket = new Socket(hostName, portNumber);

@@ -2,7 +2,7 @@
  * {
    “Sender”:8454997084,
    “Receiver”:9769737797,
-   “Message”:”Hello! Bro.”,
+   “Message”:”hello from the other side”,
    “MessageStatus”: MessageStatus.MSG_MSG}
  * @author sanyamgupta
  *
