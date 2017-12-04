@@ -18,15 +18,17 @@ public class NioServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
-        serverChannel.socket().bind(new InetSocketAddress(5050));
+        serverChannel.socket().bind(new InetSocketAddress(5051));
         serverChannel.configureBlocking(false);
         Selector selector = Selector.open();
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+
         Map<SocketChannel, ByteBuffer> activeClientMap = new HashMap<>();
         List<SocketChannel> writeReadySockets = new ArrayList<>();
         List<SocketChannel> yetToAuthenticateUsers = new ArrayList<>();
         Map<String, SocketChannel> userToChannelMap = new HashMap<>();
 
+        System.out.println("Listening connections now...");
 
         while(true){
             //before next iteration change the interest set of the to write socket to write
@@ -84,13 +86,29 @@ public class NioServer {
             if(charsRead!=-1){
 
                 String readString = new String(buff.array(), StandardCharsets.UTF_8);
-                String relevantMsg = readString.substring(0, readString.indexOf("\n")); //idea is that message will have \n only at its end
-                System.out.println("Read "+ charsRead + " bytes : "+ relevantMsg);
 
-                //Utils.transmogrify(buff.array(), charsRead);
-                /*activeClientMap.put(soc, buff);
-                writeReadySockets.add(soc);*/
-                SimpleMessage receivedMsg = new SimpleMessage(relevantMsg);
+                if(readString==null || readString.isEmpty()){
+                    return;
+                }
+
+                String relevantMsg = null;
+                Message receivedMsg = null;
+                try{
+                    relevantMsg = readString.substring(0, readString.indexOf("\n")); //idea is that message will have \n only at its end
+                    System.out.println("Read "+ charsRead + " bytes : "+ relevantMsg);
+
+                    receivedMsg = new SimpleMessage(relevantMsg);//todo this message type should be like a changable module, so that we are free to change the protocol without touching this part of the code;
+                    //todo handle exception while reading
+                }catch(Exception e){
+                    System.out.println("Got unexpected data from client: "+relevantMsg);
+                    //e.printStackTrace();
+                    return;
+                }
+
+                if(receivedMsg==null || relevantMsg == null){
+                    return;
+                }
+
                 System.out.println(receivedMsg.toString());
 
                 if(yetToAuthenticateUsers.contains(soc)){
